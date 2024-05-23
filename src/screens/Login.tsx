@@ -9,11 +9,11 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Orders');
   };
 
   return (
-    <View className="flex-1 bg-white" style={{backgroundColor: appColor.bg2}}>
+    <View className="flex-1 bg-white" style={{backgroundColor: appColor.bg}}>
       <SafeAreaView className="flex">
         <View className="flex-row justify-start">
           <TouchableOpacity

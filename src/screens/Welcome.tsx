@@ -8,7 +8,7 @@ export const WelcomeScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={{backgroundColor: appColor.bg2}} className="flex-1">
+    <SafeAreaView style={{backgroundColor: appColor.bg}} className="flex-1">
       <View className="flex-1 flex justify-around my-4">
         <Text className="text-white text-4xl font-bold text-center">
           Let's get started!
