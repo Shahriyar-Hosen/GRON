@@ -1,11 +1,75 @@
+import Geolocation from '@react-native-community/geolocation';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  PermissionsAndroid,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {appColor} from '../theme';
 
+export interface ILocation {
+  latitude: number;
+  longitude: number;
+}
+
 export const WelcomeScreen = () => {
   const navigation = useNavigation();
+  const permission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'GRON App Location Permission',
+          message: 'GRON App needs access to your Location',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the User Location');
+      } else {
+        console.log('Location permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const [currentLocation, setCurrentLocation] = useState<ILocation>({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  const getCurrentLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        setCurrentLocation({latitude, longitude});
+        console.log({latitude, longitude});
+      },
+      error => alert('Error: ', error.message),
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+  };
+
+  const openMaps = () => {
+    const {latitude, longitude} = currentLocation || {};
+    if (latitude && longitude) {
+      const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+      // Linking.openURL(url);
+      console.log('🚀 ~ openMaps ~ url:', url);
+    }
+  };
+
+  useEffect(() => {
+    permission();
+    getCurrentLocation();
+  }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: appColor.bg}} className="flex-1">
@@ -20,6 +84,20 @@ export const WelcomeScreen = () => {
           />
         </View>
         <View className="space-y-4">
+          <View className="space-y-2.5">
+            <Text className="text-primary text-lg text-center font-bold">
+              Latitude:{' '}
+              {currentLocation.latitude
+                ? currentLocation.latitude
+                : 'Loading...'}
+            </Text>
+            <Text className="text-primary text-lg text-center font-bold">
+              Longitude:{' '}
+              {currentLocation.longitude
+                ? currentLocation.longitude
+                : 'Loading...'}
+            </Text>
+          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('Login')}
             className="py-3 bg-orange-400 mx-7 rounded-xl">
