@@ -9,7 +9,7 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Orders');
   };
 
   return (
