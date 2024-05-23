@@ -5,9 +5,11 @@ import {appColor} from '../theme';
 
 export const WelcomeScreen = () => {
   return (
-    <SafeAreaView style={{backgroundColor: appColor.bg2, flex: 1}}>
+    <SafeAreaView
+      style={{backgroundColor: appColor.bg2}}
+      className="flex-1 justify-center items-center">
       <View>
-        <Text>WelcomeScreen</Text>
+        <Text className="text-white text-4xl font-bold">Welcome Screen</Text>
       </View>
     </SafeAreaView>
   );
