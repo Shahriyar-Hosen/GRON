@@ -72,7 +72,6 @@ export const WelcomeScreen = () => {
     if (latitude && longitude) {
       const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
       Linking.openURL(url);
-      console.log('🚀 ~ openMaps ~ url:', url);
     }
   };
 
@@ -82,12 +81,12 @@ export const WelcomeScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      getCurrentLocation();
-    }, 5000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     getCurrentLocation();
+  //   }, 5000);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: appColor.bg}} className="flex-1">
