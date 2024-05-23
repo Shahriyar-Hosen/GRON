@@ -9,7 +9,7 @@ export const WelcomeScreen = () => {
       style={{backgroundColor: appColor.bg2}}
       className="flex-1 justify-center items-center">
       <View>
-        <Text className="text-white text-xl">Welcome Screen</Text>
+        <Text className="text-white text-4xl font-bold">Welcome Screen</Text>
       </View>
     </SafeAreaView>
   );
