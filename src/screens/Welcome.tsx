@@ -2,7 +2,9 @@ import Geolocation from '@react-native-community/geolocation';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Image,
+  Linking,
   PermissionsAndroid,
   Text,
   TouchableOpacity,
@@ -52,7 +54,15 @@ export const WelcomeScreen = () => {
         setCurrentLocation({latitude, longitude});
         console.log({latitude, longitude});
       },
-      error => alert('Error: ', error.message),
+      error =>
+        Alert.alert('Something', 'Error:-' + error.message, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'Try Again!', onPress: () => getCurrentLocation()},
+        ]),
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
   };
@@ -61,7 +71,7 @@ export const WelcomeScreen = () => {
     const {latitude, longitude} = currentLocation || {};
     if (latitude && longitude) {
       const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-      // Linking.openURL(url);
+      Linking.openURL(url);
       console.log('🚀 ~ openMaps ~ url:', url);
     }
   };
@@ -69,6 +79,14 @@ export const WelcomeScreen = () => {
   useEffect(() => {
     permission();
     getCurrentLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      getCurrentLocation();
+    }, 5000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -79,7 +97,7 @@ export const WelcomeScreen = () => {
         </Text>
         <View className="flex-row justify-center">
           <Image
-            className="w-9/12 h-60"
+            className="w-1/2 h-40"
             source={require('../assets/images/welcome.png')}
           />
         </View>
@@ -103,6 +121,13 @@ export const WelcomeScreen = () => {
             className="py-3 bg-orange-400 mx-7 rounded-xl">
             <Text className="text-xl font-bold text-center text-gray-700">
               Login
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={openMaps}
+            className="py-3 bg-orange-400 mx-7 rounded-xl">
+            <Text className="text-xl font-bold text-center text-gray-700">
+              Open Map
             </Text>
           </TouchableOpacity>
         </View>
