@@ -1,0 +1,22 @@
+{
+  "View": {
+    "prefix": ["v", "vi", "vie", "view"],
+    "body": ["<View>", "  $1", "</View>$2"],
+    "description": "Prints React Native View Component"
+  },
+  "View With ClassName": {
+    "prefix": ["vc", "vicl", "viecls", "viewclass"],
+    "body": ["<View className='$2'>", " $1 $3", "</View>$4"],
+    "description": "Prints React Native View Component with ClassName"
+  },
+  "Text": {
+    "prefix": ["t", "te", "tex", "text"],
+    "body": ["<Text>", "  $1", "</Text>$2"],
+    "description": "Prints React Native View Component"
+  },
+  "Text With ClassName": {
+    "prefix": ["tc", "tecl", "texcls", "textclass"],
+    "body": ["<Text className='$2'>", " $1 $3", "</Text>$4"],
+    "description": "Prints React Native View Component with ClassName"
+  }
+}
