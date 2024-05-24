@@ -51,8 +51,16 @@ export const WelcomeScreen = () => {
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
-        setCurrentLocation({latitude, longitude});
-        console.log({latitude, longitude});
+        console.log('🚀 ~ getCurrentLocation ~ latitude:', {
+          latitude,
+          longitude,
+        });
+        if (
+          latitude !== currentLocation.latitude ||
+          longitude !== currentLocation.longitude
+        ) {
+          setCurrentLocation({latitude, longitude});
+        }
       },
       error =>
         Alert.alert('Something', 'Error:-' + error.message, [
@@ -81,12 +89,13 @@ export const WelcomeScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     getCurrentLocation();
-  //   }, 5000);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    const intervalId = setInterval(getCurrentLocation, 30000); // 60000ms = 1 minute
+
+    return () => clearInterval(intervalId);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: appColor.bg}} className="flex-1">
@@ -96,7 +105,7 @@ export const WelcomeScreen = () => {
         </Text>
         <View className="flex-row justify-center">
           <Image
-            className="w-1/2 h-40"
+            className="w-60 h-36"
             source={require('../assets/images/welcome.png')}
           />
         </View>
