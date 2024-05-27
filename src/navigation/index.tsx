@@ -20,7 +20,6 @@ const AppNavigation = () => {
         console.log(ret);
       })
       .catch(err => {
-        // console.warn(err.message);
         switch (err.name) {
           case 'NotFoundError':
             console.warn('User Not Found! Please login');
