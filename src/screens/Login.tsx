@@ -32,18 +32,19 @@ export const LoginScreen = () => {
       </SafeAreaView>
       <View className="flex-1 bg-white px-8 pt-8 rounded-t-[50px]">
         <View className="form space-y-2">
-          <Text className="text-gray-700 rounded-2xl mb-3">Email Address</Text>
+          <Text className="text-gray-700 rounded-2xl mb-3">User Name</Text>
+
           <TextInput
             className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-            value="john@gmail.com"
-            placeholder="Email Address"
+            value="delivery_boy_1"
+            placeholder="username"
           />
           <Text className="text-gray-700 ml-4">Password</Text>
           <TextInput
             className="p-4 bg-gray-100 text-gray-700 rounded-2xl"
             secureTextEntry
-            value="test123456"
-            placeholder="Email Address"
+            value="delivery_boy_1"
+            placeholder="your password"
           />
           <TouchableOpacity className="flex items-end mb-5">
             <Text className="text-gray-700">Forgot Password?</Text>
