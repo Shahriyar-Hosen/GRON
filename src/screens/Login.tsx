@@ -1,15 +1,41 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import axios from 'axios';
+import React, {useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {appColor} from '../theme';
+import storage from '../utils/storage';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
+  const [username, setUsername] = useState<string>('delivery_boy_1');
+  const [password, setPassword] = useState('e5haHTFqUyGz8NpCHpySgnU#');
 
   const handleSubmit = () => {
-    navigation.navigate('Orders');
+    // navigation.navigate('Orders');
+
+    const data = {username, password};
+
+    axios
+      .post('https://www.gron.com.my/wp-json/gron/v1/login', data)
+      .then(response => {
+        console.log(response.data);
+        storage.save({
+          key: 'user',
+          data: response.data,
+          expires: null,
+        });
+      })
+      .catch(error => {
+        console.error('Error sending data: ', error);
+      });
+  };
+
+  const removeStorage = () => {
+    storage.remove({
+      key: 'user',
+    });
   };
 
   return (
@@ -36,17 +62,21 @@ export const LoginScreen = () => {
 
           <TextInput
             className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
-            value="delivery_boy_1"
+            value={username}
             placeholder="username"
+            onChangeText={setUsername}
           />
           <Text className="text-gray-700 ml-4">Password</Text>
           <TextInput
             className="p-4 bg-gray-100 text-gray-700 rounded-2xl"
             secureTextEntry
-            value="delivery_boy_1"
+            value={password}
             placeholder="your password"
+            onChangeText={setPassword}
           />
-          <TouchableOpacity className="flex items-end mb-5">
+          <TouchableOpacity
+            onPress={removeStorage}
+            className="flex items-end mb-5">
             <Text className="text-gray-700">Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -60,13 +90,13 @@ export const LoginScreen = () => {
         <Text className="text-xl text-gray-700 font-bold text-center py-5">
           Or
         </Text>
-        <View className="flex-row justify-center space-x-12">
-          <TouchableOpacity className="py-2 bg-orange-100 rounded-xl w-full">
-            <Text className="text-sm font-bold text-center text-gray-700">
-              Social Login
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          disabled
+          className="py-2 bg-orange-100 rounded-xl w-full">
+          <Text className="text-sm font-bold text-center text-gray-700/80 disabled:opacity-50">
+            Social Login
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
