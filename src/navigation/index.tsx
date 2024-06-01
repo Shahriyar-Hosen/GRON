@@ -2,10 +2,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 
+import {HeaderButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {Button} from 'react-native';
+import {logout} from '../helpers';
 import {HomeScreen, LoginScreen, OrdersScreen, WelcomeScreen} from '../screens';
 import {RootStackParamList} from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const LogoutButton = (props: HeaderButtonProps) => (
+  <Button title="logout" color="orange" onPress={logout} {...props} />
+);
 
 const AppNavigation = () => {
   return (
@@ -29,7 +36,8 @@ const AppNavigation = () => {
         <Stack.Screen
           name="Orders"
           component={OrdersScreen}
-          options={{headerShown: false}}
+          // eslint-disable-next-line react/no-unstable-nested-components
+          options={{headerRight: props => <LogoutButton {...props} />}}
         />
       </Stack.Navigator>
     </NavigationContainer>
