@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useUser} from '../hooks';
 import {appColor} from '../theme';
 
 export interface ILocation {
@@ -45,6 +46,8 @@ export const WelcomeScreen = () => {
     latitude: 0,
     longitude: 0,
   });
+
+  const user = useUser();
 
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
@@ -120,10 +123,12 @@ export const WelcomeScreen = () => {
             </Text>
           </View> */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
+            onPress={() =>
+              navigation.navigate(user?.token ? 'Orders' : 'Login')
+            }
             className="py-3 bg-orange-400 mx-7 rounded-xl">
             <Text className="text-xl font-bold text-center text-gray-700">
-              Login
+              {user?.token ? 'My Orders' : 'Login'}
             </Text>
           </TouchableOpacity>
           {/* <TouchableOpacity

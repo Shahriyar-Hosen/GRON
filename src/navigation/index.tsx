@@ -1,38 +1,20 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, {useEffect} from 'react';
+import React from 'react';
 
+import {HeaderButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {Button} from 'react-native';
+import {logout} from '../helpers';
 import {HomeScreen, LoginScreen, OrdersScreen, WelcomeScreen} from '../screens';
-import storage from '../utils/storage';
 import {RootStackParamList} from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const AppNavigation = () => {
-  useEffect(() => {
-    storage
-      .load({
-        key: 'user',
-        autoSync: true,
-        syncInBackground: true,
-      })
-      .then(ret => {
-        console.log(ret);
-      })
-      .catch(err => {
-        switch (err.name) {
-          case 'NotFoundError':
-            console.warn('User Not Found! Please login');
-            // TODO;
-            break;
-          case 'ExpiredError':
-            console.warn('Login date expired! Please login');
-            // TODO
-            break;
-        }
-      });
-  }, []);
+const LogoutButton = (props: HeaderButtonProps) => (
+  <Button title="logout" color="orange" onPress={logout} {...props} />
+);
 
+const AppNavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
@@ -54,7 +36,8 @@ const AppNavigation = () => {
         <Stack.Screen
           name="Orders"
           component={OrdersScreen}
-          options={{headerShown: false}}
+          // eslint-disable-next-line react/no-unstable-nested-components
+          options={{headerRight: props => <LogoutButton {...props} />}}
         />
       </Stack.Navigator>
     </NavigationContainer>

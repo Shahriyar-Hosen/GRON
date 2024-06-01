@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {logout} from '../helpers';
 import {appColor} from '../theme';
 import storage from '../utils/storage';
 
@@ -13,29 +14,21 @@ export const LoginScreen = () => {
   const [password, setPassword] = useState('e5haHTFqUyGz8NpCHpySgnU#');
 
   const handleSubmit = () => {
-    // navigation.navigate('Orders');
-
     const data = {username, password};
-
     axios
       .post('https://www.gron.com.my/wp-json/gron/v1/login', data)
       .then(response => {
-        console.log(response.data);
-        storage.save({
-          key: 'user',
-          data: response.data,
-          expires: null,
-        });
+        storage
+          .save({
+            key: 'user',
+            data: response.data,
+            expires: null,
+          })
+          .then(() => navigation.navigate('Orders'));
       })
       .catch(error => {
         console.error('Error sending data: ', error);
       });
-  };
-
-  const removeStorage = () => {
-    storage.remove({
-      key: 'user',
-    });
   };
 
   return (
@@ -74,9 +67,7 @@ export const LoginScreen = () => {
             placeholder="your password"
             onChangeText={setPassword}
           />
-          <TouchableOpacity
-            onPress={removeStorage}
-            className="flex items-end mb-5">
+          <TouchableOpacity onPress={logout} className="flex items-end mb-5">
             <Text className="text-gray-700">Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -87,7 +78,7 @@ export const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text className="text-xl text-gray-700 font-bold text-center py-5">
+        <Text className="text-sm text-gray-700/80 font-bold text-center py-5">
           Or
         </Text>
         <TouchableOpacity
