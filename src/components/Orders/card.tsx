@@ -1,9 +1,10 @@
 import axios from 'axios';
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ItemData} from '.';
 import {useUser} from '../../hooks';
+import {API} from '../../utils/constend';
+import storage from '../../utils/storage';
 
 const Item: FC<{label: string; value: string}> = ({label, value}) => {
   return (
@@ -14,41 +15,109 @@ const Item: FC<{label: string; value: string}> = ({label, value}) => {
   );
 };
 
-export const OrderItem: FC<ItemData> = props => {
-  const {product, vendor, location, duration} = props;
+export const OrderItem: FC<any> = props => {
   const {isLoading, user} = useUser();
+  const [collected, setCollected] = useState([]);
+  const [collectionLoading, setCollectionLoading] = useState(false);
+  const [reachedLoading, setReachedLoading] = useState(false);
+
+  const saveArray = async (key, array) => {
+    try {
+      await storage.save({
+        key: key,
+        data: array,
+      });
+    } catch (e) {
+      console.error('Error saving array: ', e);
+    }
+  };
+
+  const getArray = async (key, defaultValue = []) => {
+    try {
+      const array = await storage.load({
+        key: key,
+      });
+      return array;
+    } catch (e) {
+      if (e.name === 'NotFoundError') {
+        return defaultValue;
+      } else {
+        console.error('Error fetching array: ', e);
+        throw e;
+      }
+    }
+  };
+
+  const addItemToArray = async (key, item, defaultValue = []) => {
+    try {
+      const currentArray = await getArray(key, defaultValue);
+      currentArray.push(item);
+      await saveArray(key, currentArray);
+      console.log('🚀 ~ addItemToArray ~ currentArray:', currentArray);
+    } catch (e) {
+      console.error('Error adding item to array: ', e);
+    }
+  };
+
+  const removeArrayItems = async (key, item) => {
+    const existingItems = await getArray('collected-items');
+    const newArray = existingItems.filter(arrayItem => arrayItem !== item);
+
+    saveArray('collected-items', newArray);
+  };
+
+  useEffect(() => {
+    getArray('collected-items').then(res => setCollected(res));
+  }, []);
 
   const handleCollect = async () => {
     if (!isLoading && user) {
       const data = {
-        order_id: product.id,
-        vendor_id: vendor.id,
+        order_id: props.order_id,
+        vendor_id: props.vendor_id,
         user_id: user.user_id,
       };
+      setCollectionLoading(true);
       axios
-        .post('https://www.gron.com.my/wp-json/gron/v1/order/collected', data)
-        .then(response => {
-          console.log('🚀 ~ handleCollect ~ response:', response);
+        .put(`${API}/order/collected`, data, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then(async () => {
+          await addItemToArray('collected-items', props.request_id);
+          props.refresh();
+          setCollectionLoading(false);
         })
         .catch(error => {
+          setCollectionLoading(false);
           console.error('Error sending data: ', error);
         });
     }
   };
 
   const handleReached = () => {
+    setReachedLoading(true);
     if (!isLoading && user) {
       const data = {
-        order_id: product.id,
-        vendor_id: vendor.id,
+        request_id: props.request_id,
+        order_id: props.order_id,
+        vendor_id: props.vendor_id,
         user_id: user.user_id,
       };
       axios
-        .post('https://www.gron.com.my/wp-json/gron/v1/order/reached', data)
-        .then(response => {
-          console.log('🚀 ~ handleCollect ~ response:', response);
+        .put(`${API}/order/reached`, data, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then(() => {
+          setReachedLoading(false);
+          removeArrayItems('collected-items', props.request_id);
+          props.refresh();
         })
         .catch(error => {
+          setReachedLoading(false);
           console.error('Error sending data: ', error);
         });
     }
@@ -56,27 +125,28 @@ export const OrderItem: FC<ItemData> = props => {
 
   return (
     <SafeAreaView className="p-1.5 pr-2 mx-4 my-2 rounded-xl border border-primary/50">
-      <View className="pl-0.5 pt-0.5">
-        <View>
-          <Item label="Product" value={product.name} />
-          <Item label="Vendor" value={vendor.name} />
-          <Item label="Vendor Location" value={vendor.location} />
-        </View>
-        <View className="flex flex-row justify-between items-center my-2.5 border-t border-secondary/50 py-0.5">
-          <Text className="text-xs">{location}</Text>
-          <Text className="text-xs">{duration}</Text>
-        </View>
+      <View>
+        <Item label="Order ID" value={props.order_id || ''} />
+        <Item label="Store Name" value={props.store_name || ''} />
       </View>
       <View className="flex flex-row justify-end items-center gap-1.5">
-        <TouchableOpacity
-          onPress={handleCollect}
-          className="bg-accent p-0.5 px-2.5 rounded-md">
-          <Text className="text-white text-xs">Collected</Text>
-        </TouchableOpacity>
+        {!collected.includes(props?.request_id) && (
+          <TouchableOpacity
+            onPress={handleCollect}
+            disabled={collectionLoading || reachedLoading}
+            className="bg-accent p-0.5 px-2.5 rounded-md">
+            <Text className="text-white text-xs">
+              {collectionLoading ? 'Processing...' : 'Collected'}
+            </Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           onPress={handleReached}
+          disabled={collectionLoading || reachedLoading}
           className="bg-secondary p-0.5 px-2.5 rounded-md">
-          <Text className="text-white text-xs">Reached</Text>
+          <Text className="text-white text-xs">
+            {reachedLoading ? 'Processing...' : 'Reached'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -6,6 +6,7 @@ import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {logout} from '../helpers';
 import {appColor} from '../theme';
+import {API} from '../utils/constend';
 import storage from '../utils/storage';
 
 export const LoginScreen = () => {
@@ -16,7 +17,7 @@ export const LoginScreen = () => {
   const handleSubmit = () => {
     const data = {username, password};
     axios
-      .post('https://www.gron.com.my/wp-json/gron/v1/login', data)
+      .post(`${API}/login`, data)
       .then(response => {
         storage
           .save({
@@ -78,16 +79,6 @@ export const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Text className="text-sm text-gray-700/80 font-bold text-center py-5">
-          Or
-        </Text>
-        <TouchableOpacity
-          disabled
-          className="py-2 bg-orange-100 rounded-xl w-full">
-          <Text className="text-sm font-bold text-center text-gray-700/80 disabled:opacity-50">
-            Social Login
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

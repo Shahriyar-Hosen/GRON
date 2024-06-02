@@ -6,7 +6,6 @@ import {HeaderButtonProps} from '@react-navigation/native-stack/lib/typescript/s
 import {Button} from 'react-native';
 import {logout} from '../helpers';
 import {
-  CompletedOrderScreen,
   DeliveryScreen,
   HomeScreen,
   LoginScreen,
@@ -45,15 +44,6 @@ const AppNavigation = () => {
           component={OrdersScreen}
           // eslint-disable-next-line react/no-unstable-nested-components
           options={{headerRight: props => <LogoutButton {...props} />}}
-        />
-        <Stack.Screen
-          name="CompletedOrder"
-          component={CompletedOrderScreen}
-          options={{
-            // eslint-disable-next-line react/no-unstable-nested-components
-            headerRight: props => <LogoutButton {...props} />,
-            headerTitle: '',
-          }}
         />
         <Stack.Screen
           name="Delivery"

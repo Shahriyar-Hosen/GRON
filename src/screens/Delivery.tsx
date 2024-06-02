@@ -24,9 +24,9 @@ export const DeliveryScreen = () => {
       </View>
       <View className="flex flex-row justify-end items-center mb-2">
         <TouchableOpacity
-          onPress={() => navigate('CompletedOrder')}
+          onPress={() => navigate('Orders')}
           className="p-0.5 px-2.5 rounded-md bg-accent/20 w-fit">
-          <Text className="text-right text-green-500">Completed Order</Text>
+          <Text className="text-right text-green-500">Orders</Text>
         </TouchableOpacity>
       </View>
       <Delivery />

@@ -3,6 +3,7 @@ import React, {FC, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useUser} from '../../hooks';
+import {API} from '../../utils/constend';
 
 const Item: FC<{label: string; value: string}> = ({label, value}) => {
   return (
@@ -26,15 +27,11 @@ export const DeliveryItem: FC<any> = props => {
       };
       setLoading(true);
       axios
-        .put(
-          'https://www.gron.com.my/wp-json/gron/v1/order/delivery-requests',
-          data,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
+        .put(`${API}/order/delivery-requests`, data, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
           },
-        )
+        })
         .then(() => {
           setLoading(false);
           props.refresh();

@@ -1,4 +1,3 @@
-export * from './CompletedOrder';
 export * from './Delivery';
 export * from './Home';
 export * from './Login';

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {VirtualizedList} from 'react-native';
 import {useUser} from '../../hooks';
+import {API} from '../../utils/constend';
 import {DeliveryItem} from './card';
 
 export type ItemData = {
@@ -36,7 +37,7 @@ export const Delivery = () => {
 
   const getData = async () => {
     axios
-      .get('https://www.gron.com.my/wp-json/gron/v1/order/delivery-requests', {
+      .get(`${API}/order/delivery-requests`, {
         params: dt,
         headers: {Authorization: `Bearer ${user?.token}`},
       })

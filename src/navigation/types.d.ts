@@ -10,7 +10,6 @@ export type RootStackParamList = {
   Welcome: ILocation;
   Login: undefined;
   Orders: undefined;
-  CompletedOrder: undefined;
   Delivery: undefined;
   Home: undefined;
 };

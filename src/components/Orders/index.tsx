@@ -1,8 +1,9 @@
-import React from 'react';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {VirtualizedList} from 'react-native';
 import {useUser} from '../../hooks';
+import {API} from '../../utils/constend';
 import {OrderItem} from './card';
-import {DATA} from './demodata';
 
 export type ItemData = {
   id: number;
@@ -19,47 +20,65 @@ export type ItemData = {
   duration: string;
 };
 
-const getItem = (data: ItemData[], index: number) => data[index];
-const getItemCount = (data: ItemData[]) => data.length;
+const getItem = (data: any[], index: number) => data[index];
+const getItemCount = (data: any[]) => data.length;
 
 export const Orders = () => {
-  const renderItem = ({item}: {item: ItemData}) => {
-    return <OrderItem {...item} />;
-  };
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const {user, isLoading} = useUser();
 
-  // useEffect(() => {
-  //   const dt = {
-  //     user_id: user?.user_id,
-  //     get_for: 'delivery_boy',
-  //     status: 'accepted',
-  //   };
-  //   const getData = async () => {
-  //     axios
-  //       .post('https://www.gron.com.my/wp-json/gron/v1/login', dt, {
-  //         headers: {Authorization: `Bearer ${user?.token}`},
-  //       })
-  //       .then(response => {
-  //         console.log('🚀 ~ Orders ~ response:', response);
-  //       })
-  //       .catch(error => {
-  //         console.error('Error sending data: ', error);
-  //       });
-  //   };
-  //   if (user && !isLoading) {
-  //     getData();
-  //   }
-  // }, [isLoading, user]);
+  const dt = {
+    user_id: user?.user_id,
+    get_for: 'delivery_boy',
+    status: 'accepted',
+  };
 
-  return (
-    <VirtualizedList
-      data={DATA}
-      renderItem={renderItem}
-      initialNumToRender={4}
-      keyExtractor={item => String(item.id)}
-      getItemCount={getItemCount}
-      getItem={getItem}
-    />
-  );
+  const getData = async () => {
+    axios
+      .get(`${API}/order/delivery-requests`, {
+        params: dt,
+        headers: {Authorization: `Bearer ${user?.token}`},
+      })
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setLoading(false);
+        console.error('Error sending data: ', error);
+      });
+  };
+  useEffect(() => {
+    if (user && !isLoading) {
+      getData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, user]);
+
+  const handleRefresh = () => {
+    setRefresh(true);
+    getData();
+    setRefresh(false);
+  };
+  const renderItem = ({item}: any) => {
+    return <OrderItem {...item} refresh={handleRefresh} />;
+  };
+
+  if (!loading && data) {
+    return (
+      <VirtualizedList
+        data={data}
+        renderItem={renderItem}
+        initialNumToRender={4}
+        keyExtractor={item => String(item.request_id)}
+        getItemCount={getItemCount}
+        getItem={getItem}
+        refreshing={refresh}
+        onRefresh={handleRefresh}
+      />
+    );
+  }
 };
