@@ -1,16 +1,16 @@
 import React from 'react';
 import {VirtualizedList} from 'react-native';
-import {OrderItem} from './card';
+import {CompletedOrderItem} from './card';
 import {DATA} from './demodata';
 
 export type ItemData = {
-  id: number;
+  id: string;
   product: {
-    id: number;
+    id: string;
     name: string;
   };
   vendor: {
-    id: number;
+    id: string;
     name: string;
     location: string;
   };
@@ -21,9 +21,9 @@ export type ItemData = {
 const getItem = (data: ItemData[], index: number) => data[index];
 const getItemCount = (data: ItemData[]) => data.length;
 
-export const Orders = () => {
+export const CompletedOrders = () => {
   const renderItem = ({item}: {item: ItemData}) => {
-    return <OrderItem {...item} />;
+    return <CompletedOrderItem {...item} />;
   };
 
   return (
@@ -31,7 +31,7 @@ export const Orders = () => {
       data={DATA}
       renderItem={renderItem}
       initialNumToRender={4}
-      keyExtractor={item => String(item.id)}
+      keyExtractor={item => item.id}
       getItemCount={getItemCount}
       getItem={getItem}
     />

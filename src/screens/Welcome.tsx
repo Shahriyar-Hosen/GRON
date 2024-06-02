@@ -4,13 +4,13 @@ import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Image,
-  Linking,
   PermissionsAndroid,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useUser} from '../hooks';
 import {appColor} from '../theme';
 
 export interface ILocation {
@@ -47,14 +47,13 @@ export const WelcomeScreen = () => {
     longitude: 0,
   });
 
+  const user = useUser();
+
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
-        console.log('🚀 ~ getCurrentLocation ~ latitude:', {
-          latitude,
-          longitude,
-        });
+
         if (
           latitude !== currentLocation.latitude ||
           longitude !== currentLocation.longitude
@@ -75,13 +74,13 @@ export const WelcomeScreen = () => {
     );
   };
 
-  const openMaps = () => {
-    const {latitude, longitude} = currentLocation || {};
-    if (latitude && longitude) {
-      const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-      Linking.openURL(url);
-    }
-  };
+  // const openMaps = () => {
+  //   const {latitude, longitude} = currentLocation || {};
+  //   if (latitude && longitude) {
+  //     const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+  //     Linking.openURL(url);
+  //   }
+  // };
 
   useEffect(() => {
     permission();
@@ -89,13 +88,12 @@ export const WelcomeScreen = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const intervalId = setInterval(getCurrentLocation, 30000); // 60000ms = 1 minute
+  // useEffect(() => {
+  // const intervalId = setInterval(getCurrentLocation, 30000); // 60000ms = 1 minute
 
-    return () => clearInterval(intervalId);
+  // return () => clearInterval(intervalId);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // }, []);
 
   return (
     <SafeAreaView style={{backgroundColor: appColor.bg}} className="flex-1">
@@ -110,7 +108,7 @@ export const WelcomeScreen = () => {
           />
         </View>
         <View className="space-y-4">
-          <View className="space-y-2.5">
+          {/* <View className="space-y-2.5">
             <Text className="text-primary text-lg text-center font-bold">
               Latitude:{' '}
               {currentLocation.latitude
@@ -123,21 +121,23 @@ export const WelcomeScreen = () => {
                 ? currentLocation.longitude
                 : 'Loading...'}
             </Text>
-          </View>
+          </View> */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
+            onPress={() =>
+              navigation.navigate(user?.token ? 'Orders' : 'Login')
+            }
             className="py-3 bg-orange-400 mx-7 rounded-xl">
             <Text className="text-xl font-bold text-center text-gray-700">
-              Login
+              {user?.token ? 'My Orders' : 'Login'}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={openMaps}
             className="py-3 bg-orange-400 mx-7 rounded-xl">
             <Text className="text-xl font-bold text-center text-gray-700">
               Open Map
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </SafeAreaView>
