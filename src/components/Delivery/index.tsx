@@ -23,7 +23,7 @@ export type ItemData = {
 const getItem = (data: ItemData[], index: number) => data[index];
 const getItemCount = (data: any[]) => data?.length;
 
-export const Delivery = () => {
+export const Delivery = async () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
