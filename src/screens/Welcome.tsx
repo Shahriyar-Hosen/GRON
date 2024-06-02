@@ -47,7 +47,7 @@ export const WelcomeScreen = () => {
     longitude: 0,
   });
 
-  const user = useUser();
+  const {user} = useUser();
 
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
@@ -127,7 +127,7 @@ export const WelcomeScreen = () => {
               navigation.navigate(user?.token ? 'Orders' : 'Login')
             }
             className="py-3 bg-orange-400 mx-7 rounded-xl">
-            <Text className="text-xl font-bold text-center text-gray-700">
+            <Text className="text-xl font-bold text-center text-white">
               {user?.token ? 'My Orders' : 'Login'}
             </Text>
           </TouchableOpacity>

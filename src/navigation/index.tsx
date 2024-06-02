@@ -5,8 +5,14 @@ import React from 'react';
 import {HeaderButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {Button} from 'react-native';
 import {logout} from '../helpers';
-import {HomeScreen, LoginScreen, OrdersScreen, WelcomeScreen} from '../screens';
-import {CompletedOrderScreen} from '../screens/CompletedOrder';
+import {
+  CompletedOrderScreen,
+  DeliveryScreen,
+  HomeScreen,
+  LoginScreen,
+  OrdersScreen,
+  WelcomeScreen,
+} from '../screens';
 import {RootStackParamList} from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,6 +49,15 @@ const AppNavigation = () => {
         <Stack.Screen
           name="CompletedOrder"
           component={CompletedOrderScreen}
+          options={{
+            // eslint-disable-next-line react/no-unstable-nested-components
+            headerRight: props => <LogoutButton {...props} />,
+            headerTitle: '',
+          }}
+        />
+        <Stack.Screen
+          name="Delivery"
+          component={DeliveryScreen}
           options={{
             // eslint-disable-next-line react/no-unstable-nested-components
             headerRight: props => <LogoutButton {...props} />,

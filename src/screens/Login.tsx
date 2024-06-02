@@ -10,8 +10,8 @@ import storage from '../utils/storage';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState<string>('delivery_boy_1');
-  const [password, setPassword] = useState('e5haHTFqUyGz8NpCHpySgnU#');
+  const [username, setUsername] = useState<string>('delivery_boy_3');
+  const [password, setPassword] = useState('3m&cbOIkFZLiR@gY67TM&)2J');
 
   const handleSubmit = () => {
     const data = {username, password};
@@ -73,7 +73,7 @@ export const LoginScreen = () => {
           <TouchableOpacity
             onPress={handleSubmit}
             className="py-3 bg-orange-400 rounded-xl">
-            <Text className="text-xl font-bold text-center text-gray-700">
+            <Text className="text-xl font-bold text-center text-white">
               Login
             </Text>
           </TouchableOpacity>
