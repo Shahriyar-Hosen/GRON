@@ -35,8 +35,23 @@ export const OrderItem: FC<ItemData> = props => {
         });
     }
   };
+
   const handleReached = () => {
-    console.log('pressed');
+    if (!isLoading && user) {
+      const data = {
+        order_id: product.id,
+        vendor_id: vendor.id,
+        user_id: user.user_id,
+      };
+      axios
+        .post('https://www.gron.com.my/wp-json/gron/v1/order/reached', data)
+        .then(response => {
+          console.log('🚀 ~ handleCollect ~ response:', response);
+        })
+        .catch(error => {
+          console.error('Error sending data: ', error);
+        });
+    }
   };
 
   return (
