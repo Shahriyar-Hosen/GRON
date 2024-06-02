@@ -15,8 +15,6 @@ export const OrdersScreen = () => {
     }
   }, [user, navigate]);
 
-  console.log('🚀 ~ OrdersScreen ~ user:', user);
-
   return (
     <SafeAreaView className="flex-1 px-5">
       <View className="my-8">
