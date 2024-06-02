@@ -10,17 +10,23 @@ interface IUser {
 
 export const useUser = () => {
   const [user, setUser] = useState<IUser>();
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
 
   useEffect(() => {
+    setIsLoading(true);
     storage
       .load({
         key: 'user',
         autoSync: true,
         syncInBackground: true,
       })
-      .then(res => setUser(res))
+      .then(res => {
+        setUser(res);
+        setIsLoading(false);
+      })
       .catch(err => {
+        setIsLoading(false);
         switch (err.name) {
           case 'NotFoundError':
             console.warn('User Not Found! Please login');
@@ -34,5 +40,5 @@ export const useUser = () => {
       });
   }, [navigation]);
 
-  return user;
+  return {user, isLoading};
 };

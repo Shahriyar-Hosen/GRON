@@ -1,6 +1,6 @@
 import React from 'react';
 import {VirtualizedList} from 'react-native';
-import {OrderItem} from './card';
+import {CompletedOrderItem} from './card';
 import {DATA} from './demodata';
 
 export type ItemData = {
@@ -21,9 +21,9 @@ export type ItemData = {
 const getItem = (data: ItemData[], index: number) => data[index];
 const getItemCount = (data: ItemData[]) => data.length;
 
-export const Orders = () => {
+export const CompletedOrders = () => {
   const renderItem = ({item}: {item: ItemData}) => {
-    return <OrderItem {...item} />;
+    return <CompletedOrderItem {...item} />;
   };
 
   return (
