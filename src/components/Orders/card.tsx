@@ -1,7 +1,9 @@
+import axios from 'axios';
 import React, {FC} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ItemData} from '.';
+import {useUser} from '../../hooks';
 
 const Item: FC<{label: string; value: string}> = ({label, value}) => {
   return (
@@ -14,9 +16,24 @@ const Item: FC<{label: string; value: string}> = ({label, value}) => {
 
 export const OrderItem: FC<ItemData> = props => {
   const {product, vendor, location, duration} = props;
+  const {isLoading, user} = useUser();
 
-  const handleCollect = () => {
-    console.log('pressed');
+  const handleCollect = async () => {
+    if (!isLoading && user) {
+      const data = {
+        order_id: product.id,
+        vendor_id: vendor.id,
+        user_id: user.user_id,
+      };
+      axios
+        .post('https://www.gron.com.my/wp-json/gron/v1/order/collected', data)
+        .then(response => {
+          console.log('🚀 ~ handleCollect ~ response:', response);
+        })
+        .catch(error => {
+          console.error('Error sending data: ', error);
+        });
+    }
   };
   const handleReached = () => {
     console.log('pressed');

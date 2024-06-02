@@ -4,13 +4,13 @@ import {OrderItem} from './card';
 import {DATA} from './demodata';
 
 export type ItemData = {
-  id: string;
+  id: number;
   product: {
-    id: string;
+    id: number;
     name: string;
   };
   vendor: {
-    id: string;
+    id: number;
     name: string;
     location: string;
   };
@@ -31,7 +31,7 @@ export const Orders = () => {
       data={DATA}
       renderItem={renderItem}
       initialNumToRender={4}
-      keyExtractor={item => item.id}
+      keyExtractor={item => String(item.id)}
       getItemCount={getItemCount}
       getItem={getItem}
     />
