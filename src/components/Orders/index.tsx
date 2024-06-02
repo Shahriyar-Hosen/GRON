@@ -1,38 +1,25 @@
 import React from 'react';
-import {FlatList} from 'react-native';
+import {VirtualizedList} from 'react-native';
 import {OrderItem} from './Order';
+import {DATA} from './demodata';
 
 export type ItemData = {
   id: string;
-  title: string;
-  image: string;
+  product: {
+    id: string;
+    name: string;
+  };
+  vendor: {
+    id: string;
+    name: string;
+    location: string;
+  };
   location: string;
   duration: string;
 };
 
-const DATA: ItemData[] = [
-  {
-    id: '0',
-    title: 'Potatoes',
-    image: 'https://picsum.photos/200/300?random=1',
-    location: 'Akdala, Tebariya, Natore',
-    duration: '2hr 30min',
-  },
-  {
-    id: '1',
-    title: 'Pepper',
-    image: 'https://picsum.photos/200/300?random=7',
-    location: 'Locongor, Tebariya, Natore',
-    duration: '2hr 45min',
-  },
-  {
-    id: '2',
-    title: 'Eggplant',
-    image: 'https://picsum.photos/200/300?random=33',
-    location: 'Asina Ambagan, Tebariya, Natore',
-    duration: '2hr 15min',
-  },
-];
+const getItem = (data: ItemData[], index: number) => data[index];
+const getItemCount = (data: ItemData[]) => data.length;
 
 export const Orders = () => {
   const renderItem = ({item}: {item: ItemData}) => {
@@ -40,10 +27,13 @@ export const Orders = () => {
   };
 
   return (
-    <FlatList
+    <VirtualizedList
       data={DATA}
       renderItem={renderItem}
+      initialNumToRender={4}
       keyExtractor={item => item.id}
+      getItemCount={getItemCount}
+      getItem={getItem}
     />
   );
 };
