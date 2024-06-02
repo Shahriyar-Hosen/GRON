@@ -15,13 +15,13 @@ const Item: FC<{label: string; value: string}> = ({label, value}) => {
   );
 };
 
-export const OrderItem: FC<any> = props => {
+export const OrderItem = (props: any) => {
   const {isLoading, user} = useUser();
   const [collected, setCollected] = useState([]);
   const [collectionLoading, setCollectionLoading] = useState(false);
   const [reachedLoading, setReachedLoading] = useState(false);
 
-  const saveArray = async (key, array) => {
+  const saveArray = async (key: any, array: any) => {
     try {
       await storage.save({
         key: key,
@@ -32,13 +32,13 @@ export const OrderItem: FC<any> = props => {
     }
   };
 
-  const getArray = async (key, defaultValue = []) => {
+  const getArray = async (key: any, defaultValue = []) => {
     try {
       const array = await storage.load({
         key: key,
       });
       return array;
-    } catch (e) {
+    } catch (e: any) {
       if (e.name === 'NotFoundError') {
         return defaultValue;
       } else {
@@ -48,7 +48,7 @@ export const OrderItem: FC<any> = props => {
     }
   };
 
-  const addItemToArray = async (key, item, defaultValue = []) => {
+  const addItemToArray = async (key: any, item: any, defaultValue = []) => {
     try {
       const currentArray = await getArray(key, defaultValue);
       currentArray.push(item);
@@ -59,9 +59,11 @@ export const OrderItem: FC<any> = props => {
     }
   };
 
-  const removeArrayItems = async (key, item) => {
+  const removeArrayItems = async (key: any, item: any) => {
     const existingItems = await getArray('collected-items');
-    const newArray = existingItems.filter(arrayItem => arrayItem !== item);
+    const newArray = existingItems.filter(
+      (arrayItem: any) => arrayItem !== item,
+    );
 
     saveArray('collected-items', newArray);
   };

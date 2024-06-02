@@ -7,7 +7,6 @@ import {Button} from 'react-native';
 import {logout} from '../helpers';
 import {
   DeliveryScreen,
-  HomeScreen,
   LoginScreen,
   OrdersScreen,
   WelcomeScreen,
@@ -32,11 +31,6 @@ const AppNavigation = () => {
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
