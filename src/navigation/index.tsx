@@ -2,9 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 
-import {HeaderButtonProps} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {Button} from 'react-native';
-import {logout} from '../helpers';
+import {LogoutButton} from '../components/common/LogoutButton';
 import {
   DeliveryScreen,
   LoginScreen,
@@ -14,10 +12,6 @@ import {
 import {RootStackParamList} from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
-const LogoutButton = (props: HeaderButtonProps) => (
-  <Button title="logout" color="orange" onPress={logout} {...props} />
-);
 
 const AppNavigation = () => {
   return (

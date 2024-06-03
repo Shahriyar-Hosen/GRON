@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {VirtualizedList} from 'react-native';
+import {Text, VirtualizedList} from 'react-native';
 import {useUser} from '../../hooks';
 import {API} from '../../utils/constend';
 import {DeliveryItem} from './card';
@@ -53,6 +53,10 @@ export const Delivery = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, user]);
+
+  if (loading) {
+    return <Text className="text-black">Loading...</Text>;
+  }
 
   if (!loading && data) {
     return (

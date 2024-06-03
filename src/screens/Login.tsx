@@ -4,17 +4,18 @@ import React, {useState} from 'react';
 import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {ArrowLeftIcon} from 'react-native-heroicons/solid';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {logout} from '../helpers';
 import {appColor} from '../theme';
 import {API} from '../utils/constend';
 import storage from '../utils/storage';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState<string>('delivery_boy_3');
-  const [password, setPassword] = useState('3m&cbOIkFZLiR@gY67TM&)2J');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
+    setLoading(true);
     const data = {username, password};
     axios
       .post(`${API}/login`, data)
@@ -26,8 +27,10 @@ export const LoginScreen = () => {
             expires: null,
           })
           .then(() => navigation.navigate('Orders'));
+        setLoading(false);
       })
       .catch(error => {
+        setLoading(false);
         console.error('Error sending data: ', error);
       });
   };
@@ -68,14 +71,15 @@ export const LoginScreen = () => {
             placeholder="your password"
             onChangeText={setPassword}
           />
-          <TouchableOpacity onPress={logout} className="flex items-end mb-5">
+          <TouchableOpacity className="flex items-end mb-5">
             <Text className="text-gray-700">Forgot Password?</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleSubmit}
+            disabled={loading}
             className="py-3 bg-orange-400 rounded-xl">
             <Text className="text-xl font-bold text-center text-white">
-              Login
+              {loading ? 'Loading...' : 'Login'}
             </Text>
           </TouchableOpacity>
         </View>

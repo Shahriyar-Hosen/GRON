@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {VirtualizedList} from 'react-native';
+import {Text, VirtualizedList} from 'react-native';
 import {useUser} from '../../hooks';
 import {API} from '../../utils/constend';
 import {OrderItem} from './card';
@@ -51,6 +51,10 @@ export const Orders = () => {
   const renderItem = ({item}: any) => {
     return <OrderItem {...item} refresh={handleRefresh} />;
   };
+
+  if (loading) {
+    return <Text className="text-black">Loading...</Text>;
+  }
 
   if (!loading && data) {
     return (
