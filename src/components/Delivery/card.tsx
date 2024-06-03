@@ -8,8 +8,8 @@ import {API} from '../../utils/constend';
 const Item: FC<{label: string; value: string}> = ({label, value}) => {
   return (
     <View className="flex flex-row justify-between items-center">
-      <Text className="font-bold text-xs">{label}: </Text>
-      <Text className="text-xs">{value}</Text>
+      <Text className="text-black font-bold text-xs">{label}: </Text>
+      <Text className="text-black text-xs">{value}</Text>
     </View>
   );
 };
